@@ -1,11 +1,15 @@
 import NavBar from "../../pages/Shared/NavBar/NavBar";
 import img from "../../assets/images/login/login.svg";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../providers/AuthProvider";
+import SocialLogin from "../../pages/Shared/SocialLogin/SocialLogin";
 
 const Login = () => {
   const { singInUser } = useContext(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || "/";
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -15,9 +19,8 @@ const Login = () => {
     console.log({ email, password });
 
     singInUser(email, password)
-      .then((res) => {
-        const user = res.user;
-        console.log(user);
+      .then(() => {
+        navigate(from, { replace: true });
       })
       .catch((e) => console.log(e));
   };
@@ -50,7 +53,7 @@ const Login = () => {
                     <span className="label-text">Password</span>
                   </label>
                   <input
-                    type="text"
+                    type="password"
                     name="password"
                     placeholder="password"
                     className="input input-bordered"
@@ -78,6 +81,7 @@ const Login = () => {
                   Sign Up
                 </Link>
               </p>
+              <SocialLogin />
             </div>
           </div>
         </div>
